@@ -540,7 +540,7 @@
 
 <script>
 const CLIENT_ID = '1df024da05ef40238af6250e1f9040ce';
-const REDIRECT_URI = 'https://promptify-ashy.vercel.app/';
+const REDIRECT_URI = 'https://promptify-ashy.vercel.app';
 const SCOPES = 'playlist-modify-public playlist-modify-private user-read-private user-read-email';
 
 let accessToken = null;
@@ -650,7 +650,7 @@ async function generatePlaylist() {
   hideError();
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://cold-firefly-8e98.vd8nv2yr52.workers.dev/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
