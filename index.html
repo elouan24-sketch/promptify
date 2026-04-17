@@ -15,7 +15,6 @@
   body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 20% 0%, rgba(29,185,84,0.07) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 100%, rgba(29,185,84,0.04) 0%, transparent 60%); pointer-events: none; z-index: 0; }
   .container { max-width: 740px; margin: 0 auto; padding: 56px 24px 80px; position: relative; z-index: 1; }
 
-  /* HEADER */
   .header { text-align: center; margin-bottom: 48px; animation: fadeUp 0.6s ease both; }
   .logo { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 14px; }
   .logo svg { width: 30px; height: 30px; }
@@ -23,14 +22,21 @@
   .tagline { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 8px; }
   .version-badge { display: inline-block; background: var(--green); color: #000; font-size: 0.6rem; font-weight: 800; padding: 2px 7px; border-radius: 20px; margin-left: 8px; vertical-align: middle; }
 
+  /* AUTH PAGE */
+  .auth-page { animation: fadeUp 0.5s ease both; }
+  .auth-main { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 36px; margin-bottom: 16px; text-align: center; }
+  .auth-main-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .auth-main-desc { color: var(--muted); font-size: 0.82rem; font-family: 'DM Mono', monospace; margin-bottom: 28px; line-height: 1.6; }
+  .auth-secondary { background: #0d0d0d; border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 24px; text-align: center; }
+  .auth-secondary-label { font-size: 0.68rem; font-family: 'DM Mono', monospace; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; display: block; }
+
   /* CARDS */
   .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 20px; animation: fadeUp 0.5s ease both; }
-  .auth-card { text-align: center; }
-  .auth-card p { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; font-family: 'DM Mono', monospace; }
   .connected-row { display: flex; align-items: center; justify-content: space-between; }
   .user-pill { display: inline-flex; align-items: center; gap: 10px; }
   .user-initial { width: 36px; height: 36px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #000; font-weight: 800; }
   .user-name { font-size: 0.9rem; font-weight: 600; }
+  .guest-badge { display: inline-flex; align-items: center; gap: 6px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 50px; padding: 6px 14px; font-size: 0.78rem; font-family: 'DM Mono', monospace; color: var(--muted); }
 
   /* TABS */
   .tabs { display: flex; gap: 4px; background: #0d0d0d; border-radius: 10px; padding: 4px; margin-bottom: 24px; }
@@ -58,21 +64,18 @@
 
   /* SLIDERS */
   .sliders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .slider-field { display: flex; flex-direction: column; gap: 10px; }
-  .slider-top { display: flex; justify-content: space-between; align-items: center; }
+  .slider-field { display: flex; flex-direction: column; gap: 8px; }
   .slider-name { font-size: 0.72rem; font-family: 'DM Mono', monospace; color: var(--text); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
   .slider-extremes { display: flex; justify-content: space-between; }
   .slider-extreme { font-size: 0.62rem; font-family: 'DM Mono', monospace; color: var(--muted); }
   input[type="range"] { width: 100%; -webkit-appearance: none; height: 3px; background: var(--border); border-radius: 2px; outline: none; border: none; padding: 0; cursor: pointer; }
   input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--green); border-radius: 50%; cursor: pointer; transition: transform 0.15s; }
   input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
-  .slider-neutral { font-size: 0.6rem; font-family: 'DM Mono', monospace; color: var(--border); text-align: center; margin-top: -2px; }
 
   /* TOGGLE */
   .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #0d0d0d; border: 1px solid var(--border); border-radius: 10px; margin-top: 16px; }
-  .toggle-info { display: flex; flex-direction: column; gap: 2px; }
-  .toggle-title { font-size: 0.88rem; font-weight: 600; }
-  .toggle-desc { font-size: 0.72rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .toggle-info .toggle-title { font-size: 0.88rem; font-weight: 600; }
+  .toggle-info .toggle-desc { font-size: 0.72rem; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 2px; }
   .toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
   .toggle input { opacity: 0; width: 0; height: 0; }
   .toggle-slider { position: absolute; inset: 0; background: var(--border); border-radius: 24px; cursor: pointer; transition: 0.2s; }
@@ -93,11 +96,13 @@
   .source-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(29,185,84,0.08); border: 1px solid rgba(29,185,84,0.2); border-radius: 8px; padding: 8px 12px; margin-top: 10px; font-size: 0.78rem; font-family: 'DM Mono', monospace; color: var(--green); }
 
   /* BUTTONS */
-  .btn-primary { width: 100%; background: var(--green); color: #000; border: none; border-radius: 10px; padding: 15px; font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.02em; }
+  .btn-primary { width: 100%; background: var(--green); color: #000; border: none; border-radius: 10px; padding: 15px; font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .btn-primary:hover:not(:disabled) { background: #22e865; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(29,185,84,0.25); }
   .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-  .btn-spotify { display: inline-flex; align-items: center; gap: 10px; background: var(--green); color: #000; border: none; border-radius: 50px; padding: 13px 26px; font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+  .btn-spotify { display: inline-flex; align-items: center; gap: 10px; background: var(--green); color: #000; border: none; border-radius: 50px; padding: 13px 28px; font-family: 'Syne', sans-serif; font-size: 0.92rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
   .btn-spotify:hover { background: #22e865; transform: translateY(-1px); }
+  .btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 50px; padding: 10px 22px; font-family: 'DM Mono', monospace; font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+  .btn-ghost:hover { border-color: var(--green); color: var(--green); }
   .btn-outline { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 9px 15px; font-family: 'DM Mono', monospace; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
   .btn-outline:hover { border-color: var(--green); color: var(--green); }
   .btn-icon { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; cursor: pointer; transition: all 0.2s; color: var(--muted); font-size: 0.78rem; line-height: 1; }
@@ -119,10 +124,15 @@
   .track-actions { display: flex; gap: 5px; opacity: 0; transition: opacity 0.15s; }
   .track-item:hover .track-actions { opacity: 1; }
   .track-check { font-size: 0.75rem; color: var(--green); flex-shrink: 0; opacity: 0; transition: opacity 0.2s; margin-left: 4px; }
-  .track-item.added .track-check { opacity: 1; }
+  .track-item.verified .track-check { opacity: 1; }
   .track-item.removed { opacity: 0.3; }
   .track-item.removed .track-name { text-decoration: line-through; }
-  .track-item.not-found .track-artist::after { content: ' · introuvable'; color: #ff6b6b; }
+  .track-item.validating .track-num::after { content: '⟳'; color: var(--green); animation: spin 1s linear infinite; display: inline-block; margin-left: 2px; }
+
+  /* GUEST RESULT BANNER */
+  .guest-result-banner { background: #0d0d0d; border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-top: 18px; }
+  .guest-result-title { font-size: 0.78rem; font-family: 'DM Mono', monospace; color: var(--muted); margin-bottom: 12px; }
+  .guest-result-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
   /* SHARE */
   .divider { height: 1px; background: var(--border); margin: 20px 0; }
@@ -157,20 +167,30 @@
     <div class="logo">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#1DB954"/><path d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.45-.85 13.2 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.4.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.15-.75-.45s.15-.65.45-.75c3.8-.85 7.1-.5 9.7 1.1.35.15.4.55.25.85z" fill="white"/></svg>
     </div>
-    <h1>Promptify <span class="version-badge">v2.1</span></h1>
+    <h1>Promptify <span class="version-badge">v2.2</span></h1>
     <p class="tagline">Décris une ambiance → Playlist Spotify</p>
   </div>
 
-  <!-- AUTH -->
-  <div class="card auth-card" id="authCard">
-    <p>Connecte ton compte Spotify pour créer des playlists directement</p>
-    <button class="btn-spotify" onclick="loginSpotify()">
-      <svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="black"/><path d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.45-.85 13.2 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.4.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.15-.75-.45s.15-.65.45-.75c3.8-.85 7.1-.5 9.7 1.1.35.15.4.55.25.85z" fill="white"/></svg>
-      Se connecter avec Spotify
-    </button>
+  <!-- AUTH PAGE -->
+  <div class="auth-page" id="authPage">
+    <div class="auth-main">
+      <div class="auth-main-title">🎵 Génère ta playlist maintenant</div>
+      <p class="auth-main-desc">Décris une ambiance, l'IA crée une playlist validée sur Spotify.<br>La playlist sera ajoutée directement à ta bibliothèque.</p>
+      <button class="btn-spotify" onclick="loginSpotify()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="black"/><path d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.45-.85 13.2 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.4.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.15-.75-.45s.15-.65.45-.75c3.8-.85 7.1-.5 9.7 1.1.35.15.4.55.25.85z" fill="white"/></svg>
+        Se connecter avec Spotify
+      </button>
+    </div>
+    <div class="auth-secondary">
+      <span class="auth-secondary-label">Mode invité — sans connexion</span>
+      <button class="btn-ghost" onclick="enterGuestMode()">
+        Continuer sans compte →
+      </button>
+    </div>
   </div>
 
-  <div class="card" id="connectedCard" style="display:none; padding:16px 24px;">
+  <!-- CONNECTED BAR -->
+  <div class="card" id="connectedCard" style="display:none; padding:14px 24px;">
     <div class="connected-row">
       <div class="user-pill">
         <div class="user-initial" id="userInitial">?</div>
@@ -180,13 +200,19 @@
     </div>
   </div>
 
+  <!-- GUEST BAR -->
+  <div class="card" id="guestCard" style="display:none; padding:14px 24px;">
+    <div class="connected-row">
+      <div class="guest-badge">👤 Mode invité</div>
+      <button class="btn-outline" onclick="loginSpotify()">Se connecter →</button>
+    </div>
+  </div>
+
   <!-- MAIN CARD -->
   <div class="card" id="promptCard" style="display:none;">
-
-    <!-- TABS -->
-    <div class="tabs">
+    <div class="tabs" id="tabsRow">
       <button class="tab active" onclick="switchTab('prompt')">✦ Par ambiance</button>
-      <button class="tab" onclick="switchTab('playlist')">↻ Depuis une playlist</button>
+      <button class="tab" id="tabPlaylist" onclick="switchTab('playlist')">↻ Depuis une playlist</button>
     </div>
 
     <!-- TAB PROMPT -->
@@ -195,15 +221,14 @@
       <textarea id="promptInput" placeholder="Ex: rap français mélancolique pour conduire la nuit, jazz lo-fi pour bosser, 120 BPM électro house pour la salle de sport..."></textarea>
     </div>
 
-    <!-- TAB PLAYLIST SOURCE -->
+    <!-- TAB PLAYLIST SOURCE (connecté seulement) -->
     <div class="tab-panel" id="tab-playlist">
       <span class="field-label">Cherche une de tes playlists</span>
       <input type="text" id="playlistSearchInput" placeholder="Tape pour chercher..." oninput="filterPlaylists()">
       <div class="playlist-results" id="playlistResults"></div>
-      <div id="selectedPlaylistInfo" style="display:none;"></div>
+      <div id="selectedPlaylistInfo"></div>
     </div>
 
-    <!-- OPTIONS -->
     <div class="row" style="margin-top:20px;">
       <div class="field">
         <span class="field-label">Nombre de titres</span>
@@ -215,73 +240,41 @@
       </div>
     </div>
 
-    <!-- ACCORDION RÉGLAGES AVANCÉS -->
+    <!-- ACCORDION -->
     <div class="accordion-header" onclick="toggleAccordion()">
       <span class="accordion-title">⚙ Réglages avancés</span>
       <span class="accordion-arrow" id="accordionArrow">▾</span>
     </div>
     <div class="accordion-body" id="accordionBody">
       <div class="sliders-grid">
-
         <div class="slider-field">
-          <div class="slider-top">
-            <span class="slider-name">⚡ Énergie</span>
-          </div>
+          <span class="slider-name">⚡ Énergie</span>
           <input type="range" id="slider-energy" min="1" max="10" value="5" oninput="onSliderChange()">
-          <div class="slider-extremes">
-            <span class="slider-extreme">Calme</span>
-            <span class="slider-extreme">Explosive</span>
-          </div>
+          <div class="slider-extremes"><span class="slider-extreme">Calme</span><span class="slider-extreme">Explosive</span></div>
         </div>
-
         <div class="slider-field">
-          <div class="slider-top">
-            <span class="slider-name">☀ Mood</span>
-          </div>
+          <span class="slider-name">☀ Mood</span>
           <input type="range" id="slider-mood" min="1" max="10" value="5" oninput="onSliderChange()">
-          <div class="slider-extremes">
-            <span class="slider-extreme">Sombre</span>
-            <span class="slider-extreme">Solaire</span>
-          </div>
+          <div class="slider-extremes"><span class="slider-extreme">Sombre</span><span class="slider-extreme">Solaire</span></div>
         </div>
-
         <div class="slider-field">
-          <div class="slider-top">
-            <span class="slider-name">💃 Danceabilité</span>
-          </div>
+          <span class="slider-name">💃 Danceabilité</span>
           <input type="range" id="slider-dance" min="1" max="10" value="5" oninput="onSliderChange()">
-          <div class="slider-extremes">
-            <span class="slider-extreme">Contemplatif</span>
-            <span class="slider-extreme">Dancefloor</span>
-          </div>
+          <div class="slider-extremes"><span class="slider-extreme">Contemplatif</span><span class="slider-extreme">Dancefloor</span></div>
         </div>
-
         <div class="slider-field">
-          <div class="slider-top">
-            <span class="slider-name">🎸 Agressivité</span>
-          </div>
+          <span class="slider-name">🎸 Agressivité</span>
           <input type="range" id="slider-aggro" min="1" max="10" value="5" oninput="onSliderChange()">
-          <div class="slider-extremes">
-            <span class="slider-extreme">Doux</span>
-            <span class="slider-extreme">Brutal</span>
-          </div>
+          <div class="slider-extremes"><span class="slider-extreme">Doux</span><span class="slider-extreme">Brutal</span></div>
         </div>
-
       </div>
-
-      <!-- Résumé sémantique des sliders -->
       <div id="sliderSummary" style="margin-top:14px; font-size:0.72rem; font-family:'DM Mono',monospace; color:var(--muted); min-height:16px;"></div>
-
-      <!-- DISCOVERY MODE -->
       <div class="toggle-row">
         <div class="toggle-info">
-          <span class="toggle-title">🔍 Mode Découverte</span>
-          <span class="toggle-desc">Force des artistes underground peu connus</span>
+          <div class="toggle-title">🔍 Mode Découverte</div>
+          <div class="toggle-desc">Force des artistes underground peu connus</div>
         </div>
-        <label class="toggle">
-          <input type="checkbox" id="discoveryMode">
-          <span class="toggle-slider"></span>
-        </label>
+        <label class="toggle"><input type="checkbox" id="discoveryMode"><span class="toggle-slider"></span></label>
       </div>
     </div>
 
@@ -291,7 +284,6 @@
     <div class="error-msg" id="errorMsg"></div>
   </div>
 
-  <!-- STATUS -->
   <div class="status" id="statusMsg"><span class="spinner"></span><span id="statusText">Génération...</span></div>
 
   <!-- RESULTS -->
@@ -306,22 +298,38 @@
 
     <ul class="track-list" id="trackList"></ul>
 
-    <div class="divider"></div>
-    <span class="section-label">🔗 Partager cette sélection</span>
-    <div class="share-row">
-      <input type="text" class="share-input" id="shareInput" readonly placeholder="Génère d'abord une playlist...">
-      <button class="btn-icon" onclick="copyShareLink()">📋</button>
+    <!-- GUEST: actions sans compte -->
+    <div id="guestResultActions" style="display:none;">
+      <div class="divider"></div>
+      <div class="guest-result-banner">
+        <div class="guest-result-title">Pour ajouter cette playlist à Spotify, tu as 2 options :</div>
+        <div class="guest-result-actions">
+          <button class="btn-spotify" style="font-size:0.82rem; padding:11px 20px;" onclick="loginSpotify()">
+            <svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="black"/><path d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.45-.85 13.2 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.4.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.15-.75-.45s.15-.65.45-.75c3.8-.85 7.1-.5 9.7 1.1.35.15.4.55.25.85z" fill="white"/></svg>
+            Connecte-toi pour créer la playlist
+          </button>
+          <button class="btn-ghost" onclick="copyShareLink()">🔗 Copier le lien de partage</button>
+        </div>
+      </div>
     </div>
-    <div class="share-copied" id="shareCopied">✓ Lien copié !</div>
 
-    <div class="divider"></div>
-    <button class="btn-primary" id="createBtn" onclick="createSpotifyPlaylist()">
-      <svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="black"/><path d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.45-.85 13.2 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.4.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.15-.75-.45s.15-.65.45-.75c3.8-.85 7.1-.5 9.7 1.1.35.15.4.55.25.85z" fill="white"/></svg>
-      Créer sur Spotify
-    </button>
-
-    <div id="successBanner" style="display:none;" class="success-banner">
-      <span>🎵</span><p id="successText">Playlist créée !</p>
+    <!-- CONNECTED: create + share -->
+    <div id="connectedResultActions" style="display:none;">
+      <div class="divider"></div>
+      <span class="section-label">🔗 Partager cette sélection</span>
+      <div class="share-row">
+        <input type="text" class="share-input" id="shareInput" readonly placeholder="Génère d'abord une playlist...">
+        <button class="btn-icon" onclick="copyShareLink()">📋</button>
+      </div>
+      <div class="share-copied" id="shareCopied">✓ Lien copié !</div>
+      <div class="divider"></div>
+      <button class="btn-primary" id="createBtn" onclick="createSpotifyPlaylist()">
+        <svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="black"/><path d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.45-.85 13.2 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.4.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.15-.75-.45s.15-.65.45-.75c3.8-.85 7.1-.5 9.7 1.1.35.15.4.55.25.85z" fill="white"/></svg>
+        Créer sur Spotify
+      </button>
+      <div id="successBanner" style="display:none;" class="success-banner">
+        <span>🎵</span><p id="successText">Playlist créée !</p>
+      </div>
     </div>
   </div>
 
@@ -332,7 +340,7 @@ const REDIRECT_URI = 'https://promptify-ashy.vercel.app';
 const SCOPES = 'playlist-modify-public playlist-modify-private user-read-private user-read-email playlist-read-private';
 const WORKER_URL = 'https://cold-firefly-8e98.vd8nv2yr52.workers.dev/';
 
-let accessToken = null, userId = null, generatedTracks = [], selectedSourcePlaylist = null, activeTab = 'prompt', userPlaylists = [];
+let accessToken = null, userId = null, generatedTracks = [], selectedSourcePlaylist = null, activeTab = 'prompt', userPlaylists = [], isGuest = false;
 
 // ─── PKCE ────────────────────────────────────────────────────────
 function generateRandomString(n) {
@@ -371,12 +379,22 @@ async function exchangeCode(code) {
   } else { showError('Erreur de connexion Spotify.'); }
 }
 
+function enterGuestMode() {
+  isGuest = true;
+  document.getElementById('authPage').style.display = 'none';
+  document.getElementById('guestCard').style.display = 'block';
+  document.getElementById('promptCard').style.display = 'block';
+  document.getElementById('tabPlaylist').style.display = 'none'; // pas de playlist source en mode invité
+}
+
 function logout() {
-  accessToken = null; userId = null;
+  accessToken = null; userId = null; isGuest = false;
   sessionStorage.removeItem('spotify_token');
-  document.getElementById('authCard').style.display = 'block';
+  document.getElementById('authPage').style.display = 'block';
   document.getElementById('connectedCard').style.display = 'none';
+  document.getElementById('guestCard').style.display = 'none';
   document.getElementById('promptCard').style.display = 'none';
+  document.getElementById('resultsCard').classList.remove('visible');
 }
 
 function handleCallback() {
@@ -387,7 +405,7 @@ function handleCallback() {
 
 function checkSession() {
   const token = sessionStorage.getItem('spotify_token');
-  if (token) { accessToken = token; initConnected(); }
+  if (token) { accessToken = token; initConnected(); return; }
   checkSharedLink();
 }
 
@@ -397,12 +415,16 @@ async function initConnected() {
     if (!res.ok) throw new Error();
     const data = await res.json();
     userId = data.id;
+    isGuest = false;
     document.getElementById('userInitial').textContent = (data.display_name || data.id)[0].toUpperCase();
     document.getElementById('userName').textContent = data.display_name || data.id;
-    document.getElementById('authCard').style.display = 'none';
+    document.getElementById('authPage').style.display = 'none';
     document.getElementById('connectedCard').style.display = 'block';
+    document.getElementById('guestCard').style.display = 'none';
     document.getElementById('promptCard').style.display = 'block';
+    document.getElementById('tabPlaylist').style.display = '';
     loadAllUserPlaylists();
+    checkSharedLink();
   } catch { logout(); }
 }
 
@@ -414,72 +436,52 @@ function switchTab(tab) {
   document.getElementById('tab-playlist').classList.toggle('active', tab==='playlist');
 }
 
-// ─── ACCORDION ───────────────────────────────────────────────────
 function toggleAccordion() {
-  const body = document.getElementById('accordionBody');
-  const arrow = document.getElementById('accordionArrow');
-  body.classList.toggle('open');
-  arrow.classList.toggle('open');
+  document.getElementById('accordionBody').classList.toggle('open');
+  document.getElementById('accordionArrow').classList.toggle('open');
 }
 
-// ─── SLIDERS SÉMANTIQUES ─────────────────────────────────────────
+// ─── SLIDERS ─────────────────────────────────────────────────────
 function onSliderChange() {
-  const summary = buildSliderSummary();
-  document.getElementById('sliderSummary').textContent = summary ? `→ ${summary}` : '';
+  const s = buildSliderSummary();
+  document.getElementById('sliderSummary').textContent = s ? `→ ${s}` : '';
 }
 
 function buildSliderSummary() {
   const parts = [];
-  const energy = parseInt(document.getElementById('slider-energy').value);
-  const mood = parseInt(document.getElementById('slider-mood').value);
-  const dance = parseInt(document.getElementById('slider-dance').value);
-  const aggro = parseInt(document.getElementById('slider-aggro').value);
-  if (energy <= 2) parts.push('très calme et apaisée');
-  else if (energy <= 4) parts.push('douce et posée');
-  else if (energy >= 8) parts.push('explosive et très énergique');
-  else if (energy >= 7) parts.push('dynamique et énergique');
-  if (mood <= 2) parts.push('ambiance très sombre et mélancolique');
-  else if (mood <= 4) parts.push('teintes mélancoliques');
-  else if (mood >= 8) parts.push('très joyeuse et solaire');
-  else if (mood >= 7) parts.push('positive et lumineuse');
-  if (dance <= 2) parts.push('contemplatif, pas du tout dansant');
-  else if (dance <= 4) parts.push('peu dansant');
-  else if (dance >= 8) parts.push('ultra dansant, parfait pour le dancefloor');
-  else if (dance >= 7) parts.push('groovy et dansant');
-  if (aggro <= 2) parts.push('son doux et feutré');
-  else if (aggro <= 4) parts.push('son léger');
-  else if (aggro >= 8) parts.push('son brutal et agressif');
-  else if (aggro >= 7) parts.push('son intense');
+  const e = +document.getElementById('slider-energy').value;
+  const m = +document.getElementById('slider-mood').value;
+  const d = +document.getElementById('slider-dance').value;
+  const a = +document.getElementById('slider-aggro').value;
+  if (e<=2) parts.push('très calme'); else if (e<=4) parts.push('posée'); else if (e>=8) parts.push('explosive'); else if (e>=7) parts.push('énergique');
+  if (m<=2) parts.push('très sombre'); else if (m<=4) parts.push('mélancolique'); else if (m>=8) parts.push('très joyeuse'); else if (m>=7) parts.push('positive');
+  if (d<=2) parts.push('contemplatif'); else if (d<=4) parts.push('peu dansant'); else if (d>=8) parts.push('ultra dansant'); else if (d>=7) parts.push('groovy');
+  if (a<=2) parts.push('son doux'); else if (a<=4) parts.push('son léger'); else if (a>=8) parts.push('son brutal'); else if (a>=7) parts.push('son intense');
   return parts.join(', ');
 }
 
 function getSliderInstructions() {
   const lines = [];
-  const energy = parseInt(document.getElementById('slider-energy').value);
-  const mood = parseInt(document.getElementById('slider-mood').value);
-  const dance = parseInt(document.getElementById('slider-dance').value);
-  const aggro = parseInt(document.getElementById('slider-aggro').value);
-
-  if (energy <= 2) lines.push('- Énergie : propose uniquement des morceaux très calmes, lents, contemplatifs.');
-  else if (energy <= 4) lines.push('- Énergie : privilégie des morceaux doux et posés.');
-  else if (energy >= 8) lines.push('- Énergie : propose uniquement des morceaux très énergiques, intenses, avec beaucoup de pep.');
-  else if (energy >= 7) lines.push('- Énergie : privilégie des morceaux dynamiques et énergiques.');
-
-  if (mood <= 2) lines.push('- Mood : morceaux sombres, mélancoliques, introspectifs, voire dépressifs.');
-  else if (mood <= 4) lines.push('- Mood : morceaux avec une teinte mélancolique ou nostalgique.');
-  else if (mood >= 8) lines.push('- Mood : morceaux joyeux, solaires, positifs, feel-good.');
-  else if (mood >= 7) lines.push('- Mood : morceaux lumineux et optimistes.');
-
-  if (dance <= 2) lines.push('- Danceabilité : aucun morceau ne doit donner envie de danser. Privilégie les titres contemplatifs.');
-  else if (dance <= 4) lines.push('- Danceabilité : morceaux peu dansants, plus pour écouter qu\'pour bouger.');
-  else if (dance >= 8) lines.push('- Danceabilité : uniquement des morceaux ultra-dansants, faits pour le dancefloor.');
-  else if (dance >= 7) lines.push('- Danceabilité : morceaux groovy et dansants.');
-
-  if (aggro <= 2) lines.push('- Agressivité : son très doux, feutré, jamais agressif.');
-  else if (aggro <= 4) lines.push('- Agressivité : son léger, sans aspérités.');
-  else if (aggro >= 8) lines.push('- Agressivité : son brutal, dur, intense. Pas de douceur.');
-  else if (aggro >= 7) lines.push('- Agressivité : son intense et percutant.');
-
+  const e = +document.getElementById('slider-energy').value;
+  const m = +document.getElementById('slider-mood').value;
+  const d = +document.getElementById('slider-dance').value;
+  const a = +document.getElementById('slider-aggro').value;
+  if (e<=2) lines.push('- Énergie très basse : morceaux calmes, lents, contemplatifs uniquement.');
+  else if (e<=4) lines.push('- Énergie basse : morceaux doux et posés.');
+  else if (e>=8) lines.push('- Énergie maximale : morceaux très intenses et énergiques uniquement.');
+  else if (e>=7) lines.push('- Énergie élevée : morceaux dynamiques.');
+  if (m<=2) lines.push('- Mood très sombre : morceaux mélancoliques, introspectifs.');
+  else if (m<=4) lines.push('- Mood mélancolique : teinte nostalgique.');
+  else if (m>=8) lines.push('- Mood très joyeux : morceaux feel-good, solaires.');
+  else if (m>=7) lines.push('- Mood positif : morceaux lumineux.');
+  if (d<=2) lines.push('- Pas dansant du tout : contemplatif.');
+  else if (d<=4) lines.push('- Peu dansant.');
+  else if (d>=8) lines.push('- Ultra dansant : dancefloor only.');
+  else if (d>=7) lines.push('- Groovy et dansant.');
+  if (a<=2) lines.push('- Son très doux, jamais agressif.');
+  else if (a<=4) lines.push('- Son léger.');
+  else if (a>=8) lines.push('- Son brutal et intense.');
+  else if (a>=7) lines.push('- Son percutant.');
   return lines.join('\n');
 }
 
@@ -516,11 +518,20 @@ function filterPlaylists() {
 
 function selectSourcePlaylist(id, name, img, total) {
   selectedSourcePlaylist = { id, name, img, total };
-  document.getElementById('selectedPlaylistInfo').style.display = 'block';
-  document.getElementById('selectedPlaylistInfo').innerHTML = `<div class="source-badge">✓ "${name}" — ${total} titres</div>`;
+  const info = document.getElementById('selectedPlaylistInfo');
+  info.innerHTML = `<div class="source-badge">✓ "${name}" — ${total} titres</div>`;
   document.getElementById('playlistResults').innerHTML = '';
   document.getElementById('playlistSearchInput').value = '';
   filterPlaylists();
+}
+
+// ─── HISTORIQUE ARTISTES ─────────────────────────────────────────
+function getRecentArtists() {
+  try { return JSON.parse(sessionStorage.getItem('recent_artists') || '[]'); } catch { return []; }
+}
+function saveRecentArtists(artists) {
+  const merged = [...new Set([...artists, ...getRecentArtists()])].slice(0, 40);
+  sessionStorage.setItem('recent_artists', JSON.stringify(merged));
 }
 
 // ─── GENERATE ────────────────────────────────────────────────────
@@ -529,71 +540,69 @@ async function generatePlaylist() {
   const count = parseInt(document.getElementById('trackCount').value);
   const discovery = document.getElementById('discoveryMode').checked;
   const sliderInstructions = getSliderInstructions();
-  const discoveryInstruction = discovery
-    ? '- IMPORTANT : Propose EXCLUSIVEMENT des artistes underground, indépendants ou émergents très peu connus. Évite absolument tout artiste mainstream ou populaire.'
-    : '';
+  const discoveryInstruction = discovery ? '- IMPORTANT : Propose EXCLUSIVEMENT des artistes underground, indépendants ou émergents peu connus. Évite tout artiste mainstream.' : '';
+  const recentArtists = getRecentArtists();
+  const historyInstruction = recentArtists.length > 0 ? `- DIVERSITÉ : Évite absolument ces artistes déjà utilisés récemment : ${recentArtists.join(', ')}.` : '';
 
-  let contextPrompt = '';
-  let promptTag = '';
+  let contextPrompt = '', promptTag = '';
 
   if (activeTab === 'prompt') {
     const userText = document.getElementById('promptInput').value.trim();
     if (!userText) return showError("Décris une ambiance d'abord !");
     contextPrompt = `L'utilisateur demande : "${userText}"`;
     promptTag = userText.substring(0, 60);
+
+    // Détecte si c'est une playlist spécifique à un artiste
+    const artistSpecific = /\b(playlist|morceaux?|titres?|chansons?)\s+(de|du|des)\b/i.test(userText);
+    const repeatRule = artistSpecific
+      ? `- Tu peux répéter un artiste si la demande porte clairement sur un seul artiste.`
+      : `- Un seul morceau par artiste maximum. Varie au maximum.`;
+
+    const systemPrompt = buildSystemPrompt(repeatRule, sliderInstructions, discoveryInstruction, historyInstruction);
+    await callGenerateAPI(systemPrompt, contextPrompt, count, promptTag);
+
   } else {
     if (!selectedSourcePlaylist) return showError('Sélectionne une playlist source !');
     setLoading(true, 'Analyse de ta playlist...');
     try {
-      // Fetch up to 50 tracks from the source playlist
-      const res = await fetch(`https://api.spotify.com/v1/playlists/${selectedSourcePlaylist.id}/tracks?limit=50&fields=items(track(name,artists,album(name)))`, {
+      const res = await fetch(`https://api.spotify.com/v1/playlists/${selectedSourcePlaylist.id}/tracks?limit=50&fields=items(track(name,artists))`, {
         headers: { 'Authorization': `Bearer ${accessToken}` }
       });
       const data = await res.json();
       const tracks = data.items?.map(i => i.track).filter(Boolean) || [];
       const artistCounts = {};
       tracks.forEach(t => t.artists?.forEach(a => { artistCounts[a.name] = (artistCounts[a.name]||0)+1; }));
-      const topArtists = Object.entries(artistCounts).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([name])=>name);
-      const sampleTracks = tracks.slice(0,10).map(t=>`"${t.name}" de ${t.artists?.[0]?.name}`).join(', ');
-      contextPrompt = `Génère une playlist dans le même style que la playlist "${selectedSourcePlaylist.name}".
-Artistes principaux de référence : ${topArtists.join(', ')}.
-Exemples de titres : ${sampleTracks}.
-Inspire-toi précisément du genre musical, de l'atmosphère, du style et de l'ère des artistes de référence.`;
+      const topArtists = Object.entries(artistCounts).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([n])=>n);
+      const sampleTracks = tracks.slice(0,10).map(t=>`"${t.name}" — ${t.artists?.[0]?.name}`).join(', ');
+      contextPrompt = `Génère une playlist dans le même style que la playlist "${selectedSourcePlaylist.name}".\nArtistes de référence (les plus présents) : ${topArtists.join(', ')}.\nExemples de titres : ${sampleTracks}.\nInspire-toi du genre, de l'atmosphère et de l'ère de ces artistes.`;
       promptTag = `INSPIRÉ DE "${selectedSourcePlaylist.name}"`;
-    } catch { setLoading(false); return showError('Erreur lors de la lecture de la playlist.'); }
+      const systemPrompt = buildSystemPrompt('- Varie les artistes au maximum.', sliderInstructions, discoveryInstruction, historyInstruction);
+      await callGenerateAPI(systemPrompt, contextPrompt, count, promptTag);
+    } catch { setLoading(false); showError('Erreur lors de la lecture de la playlist.'); }
   }
+}
 
-  setLoading(true, "L'IA compose ta playlist...");
+function buildSystemPrompt(repeatRule, sliderInstructions, discoveryInstruction, historyInstruction) {
+  return `Tu es un expert musicologue et curateur de playlists Spotify de haut niveau.
 
-  // Récupère l'historique des artistes récents
-  const recentArtists = getRecentArtists();
-  const historyInstruction = recentArtists.length > 0
-    ? `- DIVERSITÉ : Ces artistes ont déjà été utilisés dans des playlists récentes, évite-les absolument pour garantir la fraîcheur : ${recentArtists.join(', ')}.`
-    : '';
-
-  // Détecte si l'utilisateur mentionne un artiste spécifique dans son prompt
-  const userText = document.getElementById('promptInput').value.trim();
-  const artistRepeatInstruction = activeTab === 'prompt' && userText.length > 0
-    ? `- Si la demande porte spécifiquement sur UN artiste (ex: "une playlist Booba"), tu peux inclure plusieurs morceaux de cet artiste. Sinon, varie les artistes au maximum.`
-    : `- Varie les artistes au maximum. Pas plus d'un morceau par artiste sauf si explicitement demandé.`;
-
-  const systemPrompt = `Tu es un expert musicologue et curateur de playlists Spotify de haut niveau. Tu as une connaissance encyclopédique de la musique mondiale, de toutes les époques et de tous les pays.
-
-RÈGLES ABSOLUES — tu dois les respecter toutes sans exception :
-1. Propose UNIQUEMENT des morceaux qui existent réellement sur Spotify, avec leurs titres et noms d'artistes orthographiés EXACTEMENT comme sur Spotify (majuscules, accents, tirets, featuring, etc.).
-2. ${artistRepeatInstruction}
-3. Explore des sous-genres variés, des artistes de différentes époques et de différents pays dans le respect du style demandé. Ne reste pas sur les artistes les plus évidents.
-4. Si un BPM est mentionné dans la demande, respecte-le scrupuleusement. Tu connais les BPM réels des morceaux.
-5. Chaque morceau doit être cohérent avec le thème. Pas de morceaux "passe-partout" ou génériques.
-6. Ne génère jamais de titres ou d'artistes inventés. Si tu n'es pas sûr qu'un morceau existe sur Spotify, propose-en un autre.
-7. Diversifie les propositions : tempos, ambiances, époques, origines géographiques dans le genre demandé.
-${historyInstruction}
+RÈGLES ABSOLUES :
+1. Propose UNIQUEMENT des morceaux qui existent réellement sur Spotify, avec titres et artistes orthographiés EXACTEMENT comme sur Spotify.
+2. ${repeatRule}
+3. Explore des sous-genres variés, différentes époques et différents pays dans le style demandé.
+4. Si un BPM est mentionné, respecte-le scrupuleusement.
+5. Chaque morceau doit être cohérent avec le thème. Zéro morceau hors sujet.
+6. Ne génère jamais de titres ou d'artistes inventés. Si tu doutes qu'un titre existe sur Spotify, choisis-en un autre.
+7. Diversifie : tempos, ambiances, époques, origines géographiques, tout en restant dans le style demandé.
 ${sliderInstructions}
 ${discoveryInstruction}
+${historyInstruction}
 
-Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans backticks, sans aucun texte avant ou après :
-{"playlist_name":"Nom créatif et évocateur","tracks":[{"title":"Titre exact Spotify","artist":"Nom exact artiste Spotify"}]}`;
+Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans backticks, sans aucun texte :
+{"playlist_name":"Nom créatif","tracks":[{"title":"Titre exact Spotify","artist":"Nom exact artiste Spotify"}]}`;
+}
 
+async function callGenerateAPI(systemPrompt, contextPrompt, count, promptTag) {
+  setLoading(true, "L'IA compose ta playlist...");
   try {
     const response = await fetch(WORKER_URL, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -606,47 +615,134 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans backticks, sans auc
     const text = data.content.map(i => i.text || '').join('');
     const clean = text.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
-    generatedTracks = parsed.tracks;
+    let tracks = parsed.tracks;
 
-    // Sauvegarde les artistes dans l'historique
-    saveRecentArtists(parsed.tracks.map(t => t.artist));
+    // ── VALIDATION SPOTIFY EN DIRECT ──────────────────────────────
+    // On valide chaque titre sur Spotify et on remplace les introuvables
+    setLoading(true, 'Validation sur Spotify...');
+    tracks = await validateTracksOnSpotify(tracks, count);
 
+    saveRecentArtists(tracks.map(t => t.artist));
     const playlistTitle = document.getElementById('playlistName').value.trim() || parsed.playlist_name;
-    renderTracks(generatedTracks, playlistTitle, promptTag);
+    renderTracks(tracks, playlistTitle, promptTag);
     setLoading(false);
-  } catch (e) {
+  } catch {
     setLoading(false);
     showError('Erreur lors de la génération. Réessaie !');
   }
 }
 
-// ─── HISTORIQUE ARTISTES ─────────────────────────────────────────
-function getRecentArtists() {
+// ── VALIDATION EN DIRECT ──────────────────────────────────────────
+// Cherche chaque titre sur Spotify pendant la génération.
+// Si pas trouvé, demande un remplacement à l'IA (max 2 tentatives).
+async function validateTracksOnSpotify(tracks, targetCount) {
+  const validated = [];
+  const usedUris = new Set();
+
+  for (let i = 0; i < tracks.length; i++) {
+    setLoading(true, `Validation ${i+1}/${tracks.length}...`);
+    const result = await findValidTrack(tracks[i], usedUris, 2);
+    if (result) {
+      validated.push(result);
+      usedUris.add(result._uri);
+    }
+  }
+
+  // Si on a moins de titres que voulu, on essaie d'en regénérer
+  if (validated.length < targetCount) {
+    const missing = targetCount - validated.length;
+    setLoading(true, `Complétion de la playlist (${missing} manquants)...`);
+    try {
+      const existingArtists = validated.map(t => t.artist).join(', ');
+      const res = await fetch(WORKER_URL, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'gemini', max_tokens:500,
+          messages:[{ role:'user', content:`Tu es un expert musical. Propose ${missing} morceaux supplémentaires qui existent RÉELLEMENT sur Spotify, différents de ces artistes déjà utilisés : ${existingArtists}. Même style et ambiance que la playlist. Réponds UNIQUEMENT en JSON : {"tracks":[{"title":"...","artist":"..."}]}` }]
+        })
+      });
+      const d = await res.json();
+      const txt = d.content.map(i=>i.text||'').join('');
+      const extra = JSON.parse(txt.replace(/```json|```/g,'').trim()).tracks || [];
+      for (const t of extra) {
+        const result = await findValidTrack(t, usedUris, 1);
+        if (result && validated.length < targetCount) {
+          validated.push(result);
+          usedUris.add(result._uri);
+        }
+      }
+    } catch {}
+  }
+
+  return validated;
+}
+
+async function findValidTrack(track, usedUris, maxRetries) {
+  // Tentative 1 : recherche exacte avec validation artiste
+  let uri = await searchTrackUri(`track:"${track.title}" artist:"${track.artist}"`, track.artist);
+  if (uri && !usedUris.has(uri)) return { ...track, _uri: uri };
+
+  // Tentative 2 : recherche simplifiée avec validation artiste
+  if (!uri) uri = await searchTrackUri(`${track.title} ${track.artist}`, track.artist);
+  if (uri && !usedUris.has(uri)) return { ...track, _uri: uri };
+
+  // Pas trouvé → demande un remplacement à l'IA
+  if (maxRetries > 0) {
+    try {
+      const res = await fetch(WORKER_URL, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'gemini', max_tokens:150,
+          messages:[{ role:'user', content:`Le morceau "${track.title}" de "${track.artist}" n'existe pas sur Spotify ou est introuvable. Propose UN autre morceau similaire qui existe VRAIMENT sur Spotify. Réponds UNIQUEMENT en JSON : {"title":"...","artist":"..."}` }]
+        })
+      });
+      const d = await res.json();
+      const txt = d.content.map(i=>i.text||'').join('');
+      const replacement = JSON.parse(txt.replace(/```json|```/g,'').trim());
+      return await findValidTrack(replacement, usedUris, maxRetries - 1);
+    } catch {}
+  }
+
+  return null; // vraiment introuvable
+}
+
+async function searchTrackUri(query, expectedArtist = null) {
+  if (!accessToken && isGuest) return null; // mode invité : pas de validation Spotify possible
   try {
-    return JSON.parse(sessionStorage.getItem('recent_artists') || '[]');
-  } catch { return []; }
+    const token = accessToken || sessionStorage.getItem('spotify_token');
+    if (!token) return null;
+    const res = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=5`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    const items = data.tracks?.items || [];
+    if (!items.length) return null;
+    if (expectedArtist) {
+      const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const exp = norm(expectedArtist);
+      for (const item of items) {
+        const artists = item.artists.map(a => norm(a.name));
+        if (artists.some(a => a.includes(exp) || exp.includes(a))) return item.uri;
+      }
+      return null;
+    }
+    return items[0]?.uri || null;
+  } catch { return null; }
 }
 
-function saveRecentArtists(newArtists) {
-  const existing = getRecentArtists();
-  const merged = [...new Set([...newArtists, ...existing])].slice(0, 40);
-  sessionStorage.setItem('recent_artists', JSON.stringify(merged));
-}
-
-// ─── RENDER TRACKS ───────────────────────────────────────────────
+// ─── RENDER ──────────────────────────────────────────────────────
 function renderTracks(tracks, name, tag) {
+  generatedTracks = tracks;
   document.getElementById('resultTag').textContent = tag;
   document.getElementById('resultTitle').textContent = name;
   document.getElementById('trackList').innerHTML = tracks.map((t, i) => `
-    <li class="track-item" id="track-${i}">
+    <li class="track-item verified" id="track-${i}">
       <span class="track-num">${String(i+1).padStart(2,'0')}</span>
       <div class="track-info">
         <div class="track-name">${t.title}</div>
         <div class="track-artist">${t.artist}</div>
       </div>
       <div class="track-actions">
-        <button class="btn-icon" onclick="replaceTrack(${i})" title="Remplacer">↻</button>
-        <button class="btn-icon" onclick="removeTrack(${i})" title="Supprimer">✕</button>
+        <button class="btn-icon" onclick="replaceTrack(${i})">↻</button>
+        <button class="btn-icon" onclick="removeTrack(${i})">✕</button>
       </div>
       <span class="track-check">✓</span>
     </li>
@@ -654,58 +750,68 @@ function renderTracks(tracks, name, tag) {
 
   try {
     const shareData = btoa(unescape(encodeURIComponent(JSON.stringify({ name, tracks }))));
-    document.getElementById('shareInput').value = `${window.location.origin}${window.location.pathname}?share=${shareData}`;
+    const shareUrl = `${window.location.origin}${window.location.pathname}?share=${shareData}`;
+    if (document.getElementById('shareInput')) document.getElementById('shareInput').value = shareUrl;
   } catch {}
 
   document.getElementById('resultsCard').classList.add('visible');
-  document.getElementById('successBanner').style.display = 'none';
-  const btn = document.getElementById('createBtn');
-  btn.disabled = false;
-  btn.style.background = '';
-  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="black"/><path d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.45-.85 13.2 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.4.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.15-.75-.45s.15-.65.45-.75c3.8-.85 7.1-.5 9.7 1.1.35.15.4.55.25.85z" fill="white"/></svg> Créer sur Spotify`;
+  document.getElementById('successBanner') && (document.getElementById('successBanner').style.display = 'none');
+
+  // Affiche les bonnes actions selon le mode
+  if (isGuest) {
+    document.getElementById('guestResultActions').style.display = 'block';
+    document.getElementById('connectedResultActions').style.display = 'none';
+  } else {
+    document.getElementById('guestResultActions').style.display = 'none';
+    document.getElementById('connectedResultActions').style.display = 'block';
+    const btn = document.getElementById('createBtn');
+    btn.disabled = false; btn.style.background = '';
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="black"/><path d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.45-.85 13.2 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.4.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.15-.75-.45s.15-.65.45-.75c3.8-.85 7.1-.5 9.7 1.1.35.15.4.55.25.85z" fill="white"/></svg> Créer sur Spotify`;
+  }
+
   document.getElementById('resultsCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ─── TRACK ACTIONS ───────────────────────────────────────────────
 function removeTrack(i) {
-  const el = document.getElementById(`track-${i}`);
-  el?.classList.toggle('removed');
+  document.getElementById(`track-${i}`)?.classList.toggle('removed');
   generatedTracks[i]._removed = !generatedTracks[i]._removed;
 }
 
 async function replaceTrack(i) {
   const track = generatedTracks[i];
   const btns = document.querySelectorAll(`#track-${i} .btn-icon`);
-  btns.forEach(b => b.disabled = true);
-  btns[0].textContent = '...';
+  btns.forEach(b => b.disabled = true); btns[0].textContent = '...';
   try {
     const res = await fetch(WORKER_URL, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'gemini', max_tokens: 200,
-        messages: [{ role: 'user', content: `Tu es un expert musical. Propose 1 morceau similaire à "${track.title}" de "${track.artist}" qui existe réellement sur Spotify. Le titre et l'artiste doivent être orthographiés exactement comme sur Spotify. Réponds UNIQUEMENT en JSON valide : {"title":"...","artist":"..."}` }]
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'gemini', max_tokens:150,
+        messages:[{ role:'user', content:`Propose 1 morceau similaire à "${track.title}" de "${track.artist}" qui existe VRAIMENT sur Spotify. Titre et artiste orthographiés exactement comme sur Spotify. JSON uniquement : {"title":"...","artist":"..."}` }]
       })
     });
     const data = await res.json();
-    const text = data.content.map(i => i.text||'').join('');
-    const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
-    generatedTracks[i] = { ...parsed };
-    const item = document.getElementById(`track-${i}`);
-    item.querySelector('.track-name').textContent = parsed.title;
-    item.querySelector('.track-artist').textContent = parsed.artist;
-    item.classList.remove('removed', 'not-found');
-    delete generatedTracks[i]._removed;
+    const txt = data.content.map(i=>i.text||'').join('');
+    const parsed = JSON.parse(txt.replace(/```json|```/g,'').trim());
+    const uri = await searchTrackUri(`${parsed.title} ${parsed.artist}`, parsed.artist);
+    if (uri) {
+      generatedTracks[i] = { ...parsed, _uri: uri };
+      const item = document.getElementById(`track-${i}`);
+      item.querySelector('.track-name').textContent = parsed.title;
+      item.querySelector('.track-artist').textContent = parsed.artist;
+      item.classList.remove('removed'); item.classList.add('verified');
+      delete generatedTracks[i]._removed;
+    } else { showError('Remplacement introuvable sur Spotify, réessaie.'); }
   } catch {}
-  btns.forEach(b => b.disabled = false);
-  btns[0].textContent = '↻';
+  btns.forEach(b => b.disabled = false); btns[0].textContent = '↻';
 }
 
 // ─── SHARE ───────────────────────────────────────────────────────
 function copyShareLink() {
-  navigator.clipboard.writeText(document.getElementById('shareInput').value).then(() => {
+  const val = document.getElementById('shareInput')?.value || '';
+  if (!val) return;
+  navigator.clipboard.writeText(val).then(() => {
     const el = document.getElementById('shareCopied');
-    el.classList.add('visible');
-    setTimeout(() => el.classList.remove('visible'), 2000);
+    if (el) { el.classList.add('visible'); setTimeout(() => el.classList.remove('visible'), 2000); }
   });
 }
 
@@ -714,12 +820,14 @@ function checkSharedLink() {
   if (!share) return;
   try {
     const decoded = JSON.parse(decodeURIComponent(escape(atob(share))));
+    // Affiche en mode invité si pas connecté
+    if (!accessToken) { isGuest = true; document.getElementById('authPage').style.display = 'none'; document.getElementById('guestCard').style.display = 'block'; document.getElementById('promptCard').style.display = 'block'; }
     generatedTracks = decoded.tracks;
     renderTracks(decoded.tracks, decoded.name, 'PLAYLIST PARTAGÉE');
   } catch {}
 }
 
-// ─── CREATE PLAYLIST + FALLBACK ──────────────────────────────────
+// ─── CREATE PLAYLIST ─────────────────────────────────────────────
 async function createSpotifyPlaylist() {
   const btn = document.getElementById('createBtn');
   btn.disabled = true;
@@ -730,33 +838,20 @@ async function createSpotifyPlaylist() {
   try {
     const plRes = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
       method:'POST', headers:{'Authorization':`Bearer ${accessToken}`,'Content-Type':'application/json'},
-      body: JSON.stringify({ name, description:'Créée par Promptify v2.1 ✦', public:true })
+      body: JSON.stringify({ name, description:'Créée par Promptify ✦', public:true })
     });
     const playlist = await plRes.json();
     const playlistId = playlist.id;
 
-    const uris = [];
-    for (let i = 0; i < activeTracks.length; i++) {
-      const t = activeTracks[i];
-      setLoading(true, `Recherche ${i+1}/${activeTracks.length}...`);
+    // Les URIs sont déjà connues depuis la validation — on les réutilise directement
+    const uris = activeTracks.filter(t => t._uri).map(t => t._uri);
 
-      // First attempt: exact search with artist validation
-      let uri = await searchTrackUri(`track:"${t.title}" artist:"${t.artist}"`, t.artist);
-
-      // Fallback 1: simplified search with artist validation
-      if (!uri) uri = await searchTrackUri(`${t.title} ${t.artist}`, t.artist);
-
-      // Fallback 2: title only WITHOUT artist validation (dernier recours, on accepte n'importe quoi)
-      if (!uri) uri = await searchTrackUri(`${t.title} ${t.artist}`);
-
-      if (uri) {
-        uris.push(uri);
-        const idx = generatedTracks.indexOf(t);
-        document.getElementById(`track-${idx}`)?.classList.add('added');
-      } else {
-        const idx = generatedTracks.indexOf(t);
-        document.getElementById(`track-${idx}`)?.classList.add('not-found');
-      }
+    // Pour les rares tracks sans URI (ajoutés via partage), on cherche
+    const withoutUri = activeTracks.filter(t => !t._uri);
+    for (const t of withoutUri) {
+      setLoading(true, `Recherche "${t.title}"...`);
+      const uri = await searchTrackUri(`${t.title} ${t.artist}`, t.artist);
+      if (uri) uris.push(uri);
     }
 
     if (uris.length > 0) {
@@ -767,43 +862,13 @@ async function createSpotifyPlaylist() {
     }
 
     setLoading(false);
-    const notFound = activeTracks.length - uris.length;
-    const notFoundMsg = notFound > 0 ? ` (${notFound} introuvable${notFound>1?'s':''} sur Spotify)` : '';
-    document.getElementById('successText').innerHTML = `${uris.length} titres ajoutés${notFoundMsg} ! <a href="https://open.spotify.com/playlist/${playlistId}" target="_blank">Ouvrir dans Spotify →</a>`;
+    document.getElementById('successText').innerHTML = `${uris.length} titres ajoutés ! <a href="https://open.spotify.com/playlist/${playlistId}" target="_blank">Ouvrir dans Spotify →</a>`;
     document.getElementById('successBanner').style.display = 'flex';
-    btn.innerHTML = '✓ Playlist créée !';
-    btn.style.background = '#158a3e';
+    btn.innerHTML = '✓ Playlist créée !'; btn.style.background = '#158a3e';
   } catch {
     setLoading(false); btn.disabled = false; btn.innerHTML = 'Réessayer';
     showError('Erreur lors de la création.');
   }
-}
-
-async function searchTrackUri(query, expectedArtist = null) {
-  try {
-    const res = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=5`, {
-      headers: { 'Authorization': `Bearer ${accessToken}` }
-    });
-    const data = await res.json();
-    const items = data.tracks?.items || [];
-    if (!items.length) return null;
-
-    // Si on a un artiste attendu, on vérifie la correspondance
-    if (expectedArtist) {
-      const normalize = s => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const expected = normalize(expectedArtist);
-      // Cherche le premier résultat dont l'artiste correspond
-      for (const item of items) {
-        const artists = item.artists.map(a => normalize(a.name));
-        if (artists.some(a => a.includes(expected) || expected.includes(a))) {
-          return item.uri;
-        }
-      }
-      return null; // Aucun résultat ne correspond à l'artiste attendu
-    }
-
-    return items[0]?.uri || null;
-  } catch { return null; }
 }
 
 // ─── HELPERS ─────────────────────────────────────────────────────
@@ -820,11 +885,10 @@ function resetForm() {
   document.getElementById('promptInput').value = '';
   document.getElementById('playlistName').value = '';
   selectedSourcePlaylist = null;
-  document.getElementById('playlistSearchInput').value = '';
-  document.getElementById('selectedPlaylistInfo').style.display = 'none';
-  document.getElementById('selectedPlaylistInfo').innerHTML = '';
+  if (document.getElementById('playlistSearchInput')) document.getElementById('playlistSearchInput').value = '';
+  document.getElementById('selectedPlaylistInfo') && (document.getElementById('selectedPlaylistInfo').innerHTML = '');
   generatedTracks = [];
-  filterPlaylists();
+  if (userPlaylists.length) filterPlaylists();
 }
 
 // ─── INIT ────────────────────────────────────────────────────────
