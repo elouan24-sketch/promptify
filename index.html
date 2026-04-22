@@ -636,75 +636,33 @@ async function callGenerateAPI(systemPrompt, contextPrompt, count, promptTag) {
 }
 
 // ── VALIDATION EN DIRECT ──────────────────────────────────────────
-// Cherche chaque titre sur Spotify pendant la génération.
-// Si pas trouvé, demande un remplacement à l'IA (max 2 tentatives).
+// Cherche chaque titre sur Spotify. Si pas trouvé, on le marque comme absent
+// sans rappeler l'IA (pour économiser le quota Gemini).
 async function validateTracksOnSpotify(tracks, targetCount) {
   const validated = [];
   const usedUris = new Set();
 
   for (let i = 0; i < tracks.length; i++) {
     setLoading(true, `Validation ${i+1}/${tracks.length}...`);
-    const result = await findValidTrack(tracks[i], usedUris, 2);
-    if (result) {
-      validated.push(result);
-      usedUris.add(result._uri);
-    }
-  }
+    const track = tracks[i];
 
-  // Si on a moins de titres que voulu, on essaie d'en regénérer
-  if (validated.length < targetCount) {
-    const missing = targetCount - validated.length;
-    setLoading(true, `Complétion de la playlist (${missing} manquants)...`);
-    try {
-      const existingArtists = validated.map(t => t.artist).join(', ');
-      const res = await fetch(WORKER_URL, {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ model:'gemini', max_tokens:500,
-          messages:[{ role:'user', content:`Tu es un expert musical. Propose ${missing} morceaux supplémentaires qui existent RÉELLEMENT sur Spotify, différents de ces artistes déjà utilisés : ${existingArtists}. Même style et ambiance que la playlist. Réponds UNIQUEMENT en JSON : {"tracks":[{"title":"...","artist":"..."}]}` }]
-        })
-      });
-      const d = await res.json();
-      const txt = d.content.map(i=>i.text||'').join('');
-      const extra = JSON.parse(txt.replace(/```json|```/g,'').trim()).tracks || [];
-      for (const t of extra) {
-        const result = await findValidTrack(t, usedUris, 1);
-        if (result && validated.length < targetCount) {
-          validated.push(result);
-          usedUris.add(result._uri);
-        }
-      }
-    } catch {}
+    // Tentative 1 : recherche exacte avec validation artiste
+    let uri = await searchTrackUri(`track:"${track.title}" artist:"${track.artist}"`, track.artist);
+
+    // Tentative 2 : recherche simplifiée avec validation artiste
+    if (!uri) uri = await searchTrackUri(`${track.title} ${track.artist}`, track.artist);
+
+    // Tentative 3 : sans guillemets, sans validation stricte artiste
+    if (!uri) uri = await searchTrackUri(`${track.title} ${track.artist}`);
+
+    if (uri && !usedUris.has(uri)) {
+      validated.push({ ...track, _uri: uri });
+      usedUris.add(uri);
+    }
+    // Si introuvable on l'ignore simplement (pas de rappel Gemini)
   }
 
   return validated;
-}
-
-async function findValidTrack(track, usedUris, maxRetries) {
-  // Tentative 1 : recherche exacte avec validation artiste
-  let uri = await searchTrackUri(`track:"${track.title}" artist:"${track.artist}"`, track.artist);
-  if (uri && !usedUris.has(uri)) return { ...track, _uri: uri };
-
-  // Tentative 2 : recherche simplifiée avec validation artiste
-  if (!uri) uri = await searchTrackUri(`${track.title} ${track.artist}`, track.artist);
-  if (uri && !usedUris.has(uri)) return { ...track, _uri: uri };
-
-  // Pas trouvé → demande un remplacement à l'IA
-  if (maxRetries > 0) {
-    try {
-      const res = await fetch(WORKER_URL, {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ model:'gemini', max_tokens:150,
-          messages:[{ role:'user', content:`Le morceau "${track.title}" de "${track.artist}" n'existe pas sur Spotify ou est introuvable. Propose UN autre morceau similaire qui existe VRAIMENT sur Spotify. Réponds UNIQUEMENT en JSON : {"title":"...","artist":"..."}` }]
-        })
-      });
-      const d = await res.json();
-      const txt = d.content.map(i=>i.text||'').join('');
-      const replacement = JSON.parse(txt.replace(/```json|```/g,'').trim());
-      return await findValidTrack(replacement, usedUris, maxRetries - 1);
-    } catch {}
-  }
-
-  return null; // vraiment introuvable
 }
 
 async function searchTrackUri(query, expectedArtist = null) {
@@ -797,13 +755,17 @@ async function replaceTrack(i) {
     const res = await fetch(WORKER_URL, {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ model:'gemini', max_tokens:150,
-        messages:[{ role:'user', content:`Propose 1 morceau similaire à "${track.title}" de "${track.artist}" qui existe VRAIMENT sur Spotify. Titre et artiste orthographiés exactement comme sur Spotify. JSON uniquement : {"title":"...","artist":"..."}` }]
+        messages:[{ role:'user', content:`Propose 1 morceau similaire à "${track.title}" de "${track.artist}" qui existe VRAIMENT sur Spotify. JSON uniquement : {"title":"...","artist":"..."}` }]
       })
     });
     const data = await res.json();
     const txt = data.content.map(i=>i.text||'').join('');
     const parsed = JSON.parse(txt.replace(/```json|```/g,'').trim());
-    const uri = await searchTrackUri(`${parsed.title} ${parsed.artist}`, parsed.artist);
+
+    // Valide sur Spotify avant d'afficher
+    const uri = await searchTrackUri(`${parsed.title} ${parsed.artist}`, parsed.artist)
+              || await searchTrackUri(`${parsed.title} ${parsed.artist}`);
+
     if (uri) {
       generatedTracks[i] = { ...parsed, _uri: uri };
       const item = document.getElementById(`track-${i}`);
@@ -811,8 +773,10 @@ async function replaceTrack(i) {
       item.querySelector('.track-artist').textContent = parsed.artist;
       item.classList.remove('removed'); item.classList.add('verified');
       delete generatedTracks[i]._removed;
-    } else { showError('Remplacement introuvable sur Spotify, réessaie.'); }
-  } catch {}
+    } else {
+      showError('Remplacement introuvable sur Spotify, réessaie.');
+    }
+  } catch { showError('Erreur lors du remplacement.'); }
   btns.forEach(b => b.disabled = false); btns[0].textContent = '↻';
 }
 
