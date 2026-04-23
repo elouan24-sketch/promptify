@@ -618,12 +618,7 @@ async function callGenerateAPI(systemPrompt, contextPrompt, count, promptTag) {
     const text = data.content.map(i => i.text || '').join('');
     const clean = text.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
-    let tracks = parsed.tracks;
-
-    // ── VALIDATION SPOTIFY EN DIRECT ──────────────────────────────
-    // On valide chaque titre sur Spotify et on remplace les introuvables
-    setLoading(true, 'Validation sur Spotify...');
-    tracks = await validateTracksOnSpotify(tracks, count);
+    const tracks = parsed.tracks;
 
     saveRecentArtists(tracks.map(t => t.artist));
     const playlistTitle = document.getElementById('playlistName').value.trim() || parsed.playlist_name;
@@ -816,9 +811,21 @@ async function createGuestPlaylist() {
   btn.innerHTML = '<span class="spinner" style="border-color:#0003;border-top-color:#000"></span> Création...';
   const name = document.getElementById('resultTitle').textContent;
   const activeTracks = generatedTracks.filter(t => !t._removed);
-  const uris = activeTracks.filter(t => t._uri).map(t => t._uri);
 
   try {
+    // Recherche les URIs via le Worker (compte propriétaire)
+    const uris = [];
+    for (let i = 0; i < activeTracks.length; i++) {
+      const t = activeTracks[i];
+      setLoading(true, `Recherche ${i+1}/${activeTracks.length}...`);
+      let uri = t._uri || null;
+      if (!uri) uri = await searchTrackUri(`track:"${t.title}" artist:"${t.artist}"`, t.artist);
+      if (!uri) uri = await searchTrackUri(`${t.title} ${t.artist}`, t.artist);
+      if (!uri) uri = await searchTrackUri(`${t.title} ${t.artist}`);
+      if (uri) uris.push(uri);
+    }
+
+    setLoading(true, 'Création de la playlist...');
     const res = await fetch(WORKER_URL, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'create_guest_playlist', name, uris })
@@ -826,6 +833,7 @@ async function createGuestPlaylist() {
     const data = await res.json();
     if (!data.playlist_url) throw new Error();
 
+    setLoading(false);
     btn.innerHTML = '✓ Playlist créée !';
     btn.style.background = '#158a3e';
     document.getElementById('guestSuccessText').innerHTML = `
@@ -835,6 +843,7 @@ async function createGuestPlaylist() {
     `;
     document.getElementById('guestSuccessBanner').style.display = 'flex';
   } catch {
+    setLoading(false);
     btn.disabled = false;
     btn.innerHTML = 'Créer la playlist Spotify';
     showError('Erreur lors de la création. Réessaie !');
@@ -857,15 +866,19 @@ async function createSpotifyPlaylist() {
     const playlist = await plRes.json();
     const playlistId = playlist.id;
 
-    // Les URIs sont déjà connues depuis la validation — on les réutilise directement
-    const uris = activeTracks.filter(t => t._uri).map(t => t._uri);
-
-    // Pour les rares tracks sans URI (ajoutés via partage), on cherche
-    const withoutUri = activeTracks.filter(t => !t._uri);
-    for (const t of withoutUri) {
-      setLoading(true, `Recherche "${t.title}"...`);
-      const uri = await searchTrackUri(`${t.title} ${t.artist}`, t.artist);
-      if (uri) uris.push(uri);
+    const uris = [];
+    for (let i = 0; i < activeTracks.length; i++) {
+      const t = activeTracks[i];
+      setLoading(true, `Recherche ${i+1}/${activeTracks.length}...`);
+      let uri = t._uri || null;
+      if (!uri) uri = await searchTrackUri(`track:"${t.title}" artist:"${t.artist}"`, t.artist);
+      if (!uri) uri = await searchTrackUri(`${t.title} ${t.artist}`, t.artist);
+      if (!uri) uri = await searchTrackUri(`${t.title} ${t.artist}`);
+      if (uri) {
+        uris.push(uri);
+        const idx = generatedTracks.indexOf(t);
+        document.getElementById(`track-${idx}`)?.classList.add('verified');
+      }
     }
 
     if (uris.length > 0) {
