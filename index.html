@@ -636,8 +636,6 @@ async function callGenerateAPI(systemPrompt, contextPrompt, count, promptTag) {
 }
 
 // ── VALIDATION EN DIRECT ──────────────────────────────────────────
-// Cherche chaque titre sur Spotify. Si pas trouvé, on le marque comme absent
-// sans rappeler l'IA (pour économiser le quota Gemini).
 async function validateTracksOnSpotify(tracks, targetCount) {
   const validated = [];
   const usedUris = new Set();
@@ -649,17 +647,26 @@ async function validateTracksOnSpotify(tracks, targetCount) {
     // Tentative 1 : recherche exacte avec validation artiste
     let uri = await searchTrackUri(`track:"${track.title}" artist:"${track.artist}"`, track.artist);
 
-    // Tentative 2 : recherche simplifiée avec validation artiste
+    // Tentative 2 : titre + artiste sans guillemets, avec validation artiste
     if (!uri) uri = await searchTrackUri(`${track.title} ${track.artist}`, track.artist);
 
-    // Tentative 3 : sans guillemets, sans validation stricte artiste
+    // Tentative 3 : titre seul avec validation artiste souple
+    if (!uri) uri = await searchTrackUri(track.title, track.artist);
+
+    // Tentative 4 : titre + artiste sans aucune validation (on accepte ce que Spotify trouve)
     if (!uri) uri = await searchTrackUri(`${track.title} ${track.artist}`);
+
+    // Tentative 5 : titre seul sans validation
+    if (!uri) uri = await searchTrackUri(track.title);
 
     if (uri && !usedUris.has(uri)) {
       validated.push({ ...track, _uri: uri });
       usedUris.add(uri);
+    } else if (uri && usedUris.has(uri)) {
+      // URI déjà utilisée, on garde quand même le track sans URI pour l'affichage
+      validated.push({ ...track });
     }
-    // Si introuvable on l'ignore simplement (pas de rappel Gemini)
+    // Seulement si vraiment introuvable on ignore
   }
 
   return validated;
